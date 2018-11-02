@@ -1,0 +1,188 @@
+---
+title: Computer Vision & Natural Language Processing Applications in the Insurance
+  Industry
+author: "Aaron Miles"
+date: "11/02/2018"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(magick)
+library(kableExtra)
+
+cfpb <- read_csv('Consumer_Complaints.csv')
+
+
+# Fixvariablenames
+names(cfpb) <- tolower(gsub("[^[:alnum:]]","",names(cfpb)))
+
+
+# Remove NonComplaints (results in ~320,000 cases)
+cfpb <- cfpb %>%
+  filter(!is.na(consumercomplaintnarrative), !is.na(product)) %>%
+  group_by(product) %>%
+  mutate(n_cases=n()) %>%
+  filter(n_cases>10000)
+
+table <- cfpb %>%
+  select(consumercomplaintnarrative, product)
+
+
+```
+
+## About Me
+
+**Education**
+
+- Social Scientist turned Data Scientist
+- Undergrad at BYU, Grad School at OSU
+
+**Work**
+
+- Past
+    + Marketing Analyst/Data Scientist at Express
+    + Data Scientist at The Shipyard
+- Current
+    + Data Scientist at Columbus Collaboratory
+
+
+## Structured and Unstructured Data
+
+- Structured Data: 
+
+    + Relational Databases
+    + Spreadsheets
+    + Tables, etc.
+  
+- Unstructured Data: 
+
+    + Images
+    + Text
+    + Video
+
+## Structured and Unstructured Data
+
+- Structured Data: 
+
+    + Old Reliable
+    + Still Lots of Value
+  
+- Unstructured Data: 
+
+    + Wild West
+    + Prime ground for innovation and value extraction
+
+- Why?
+
+    + Previously unanalyzed
+    + Closer to what the user experiences
+    + More nuanced
+
+
+## Structured and Unstructured Data
+
+**Burtch Works Classification**
+
+- Work with unstructured data? Data Scientist
+- Work only with structured data? Predictive Analytics Professional
+
+## Why Unstructured Data Now?
+
+Advances in:
+
+- Storage
+- Computing Efficiency
+- Algorithmic Breakthroughs (Backpropogation)
+
+## Types of Questions
+
+Machine Learning typically answers three types of questions:
+
+- Regression: How much?
+
+- Classification: Which group?
+
+- Clustering: How can this be split up?
+
+- Detection: Where is it/are they?
+
+## Examples
+
+Where did I find examples?
+
+- The Internet! People love to brag about what they're doing in this area
+- Kaggle, A data science competition site
+- Friends & Connections
+
+## Computer Vision Example: Distracted Driving Detection
+
+Using an image from a dashboard cam, can we classify what this person is doing into 10 classes:
+
+    - Normal Driving
+    - Texting (Left or Right)
+    - Talking on the Phone (Left or Right)
+    - Radio
+    - Hair/Makeup
+    - Talking to Passengers
+    - Reaching Behind
+    - Drinking
+
+*Data from a competition sponsored by State Farm on Kaggle*
+
+## Computer Vision Example: Distracted Driving Detection
+```{r image_example, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE}
+file <- sample(list.files('imgs/test/'),4)
+
+par(mfrow=c(2,2), mar=c(1,1,1,1))
+paste('imgs/test/', file[1], sep='/') %>% image_read() %>% plot()
+paste('imgs/test/', file[2], sep='/') %>% image_read() %>% plot()
+paste('imgs/test/', file[3], sep='/') %>% image_read() %>% plot()
+paste('imgs/test/', file[4], sep='/') %>% image_read() %>% plot()
+
+```
+
+
+## Other Computer Vision Examples
+
+- Snapping images of accidents to assess damage
+      + Could apply to homes as well
+- Drones flying over disaster areas to assess the insurer's liability
+- Estimate the CTR of a banner ad
+- Webpage conversion optimization
+
+## Natural Language Processing Example: Customer Complaint Classification
+
+When a customer makes a complaint, how does it get to the right place? 
+
+Identifying where it should go can be done automatically.
+
+## Natural Language Processing Example: Customer Complaint Classification
+```{r preview_table, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(head(table), longtable=TRUE) %>%
+  kable_styling(font_size = 15, bootstrap_options = c("striped", "hover")) %>%
+  scroll_box(width = "725px", height = "450px")
+
+```
+
+
+## Other Natural Language Processing Examples
+
+- Augmenting Chatbots
+- Analyze how the brand is talked about on Social Media/News releases.
+- Added input to fraud detection or claims management systems.
+
+## Considerations
+
+- Too big for laptops
+- LOTS of tagged data needed
+- Computing power (GPU's speed up processing, and are necessary for at least image analyses at meaningful scale)
+
+
+## 
+
+Questions?
